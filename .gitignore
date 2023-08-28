@@ -1,0 +1,7 @@
+.env
+*.log*
+*.csv*
+*.run
+mm/pkgs/*
+mm/envs/*
+models*

@@ -1,0 +1,41 @@
+###################################
+TGI-bench
+version 0.0.1
+D.B Kinghorn 
+Puget Systems 2023
+###################################
+
+This directory contains a collection of tools to do a repeatable bechhmark
+using HuggingFace Text Generation Inference (TGI).
+
+The default model is llama-2-70b-chat-hf but that can be changed by editing
+the RUN-ME-tgi-bench.sh file.
+
+USAGE:
+    ./RUN-ME-tgi-bench.sh
+    or 
+    ./RUN-ME-tgi-bench.sh <number of prompt repeats>
+    The default repeats is 3 use more for thermal load monitoring i.e. 50
+
+    Results are output to
+    - The screen with per run timing and summary stats at the end
+    - tgi-log with is the raw json TGI server logs
+    - results.csv [Timestamp,Validation Time (ms),Queue Time (ms),Inference Time (s),Time per Token (ms)]
+    - gpu.log which is the output of nvidia-smi for the run monitoring performance and GPU temperature
+
+    To monitor gpu specs during the benchmark run open another terminal and run
+    tail -f gpu.log (CTRL-C to stop)
+
+Puget local
+    Download the benchmark directory from the NAS to the test machine
+    On the test systems do
+
+    rsync -av user@172.19.0.10://mnt/storage/install/Temp/TGI-bench .  (don't forget the "dot" at the end)
+
+    It may take a long time to download (~150GB). It also seems that the nas likes to drop the connection!
+    rsync will do the right thing and pick up where it left off. It will also skip files that are already there.
+
+    cd to the benchmark directory and run ./RUN-ME-tgi-bench.sh or ./RUN-ME-tgi-bench.sh <number of prompt repeats>
+    and monitor the gpu.log file with tail -f gpu.log
+
+
