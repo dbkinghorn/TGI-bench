@@ -36,6 +36,8 @@ It gives a nice message about setting the revision. I'll do that...
 
 ## This client.py should be (mostly) repeatable for benchmarking.
 
+Very useful site for LLM input templates!
+[https://gpus.llm-utils.org/llama-2-prompt-template/](https://gpus.llm-utils.org/llama-2-prompt-template/)
 ```
 #!/usr/bin/env python
 
@@ -92,12 +94,14 @@ dependencies:
       - pandas
  ```
 
- Used my npdepyenv.py program and the above yml file to create a python env for the client.
+ Used my nodepyenv.py program and the above yml file to create a python env for the client.
 
  python path is `./mm/envs/py-client-env/bin/python`
 
  ## Modify TGI container to allow a bash shell
- Very annoying that they didn't allow this!
+ Very annoying that they didn't allow this! 
+ We need to be able to modify the container to include the NVIDIA container toolkit 
+ so that it is not a runtime install dependency. 
 
  Creating a new container bundle with the following changes to the the rc config.
 
@@ -105,7 +109,7 @@ dependencies:
  enroot create --name tgi-1.0.1-2 huggingface+text-generation-inference+1.0.1.sqsh
  cd ~/.local/share/enroot/tgi-1.0.1-2/etc
  ```
- current rc file
+ #### current rc file
  ```
  mkdir -p "/usr/src" 2> /dev/null
 cd "/usr/src" && unset OLDPWD || exit 1
@@ -120,7 +124,7 @@ else
     exec 'text-generation-launcher' '--json-output'
 fi
 ```
-change to 
+#### change to 
 ```
 mkdir -p "/usr/src" 2> /dev/null
 cd "/usr/src" && unset OLDPWD || exit 1
@@ -135,11 +139,11 @@ else
     exec '/bin/bash'
 fi
 ```
-start the container and install nvidia container toolkit
+#### start the container and install nvidia container toolkit
 ```
 enroot start --rw --root tgi-1.0.1-2
 ```
-Add an editor! (running as root so now sudo)
+Add an editor! (running as root so no sudo)
 ```
 apt update
 apt install nano
