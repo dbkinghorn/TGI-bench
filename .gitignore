@@ -2,6 +2,8 @@
 *.log*
 *.csv*
 *.run
+*.sqsh
+testing*
 mm/pkgs/*
 mm/envs/*
 models*

@@ -13,8 +13,8 @@ set -m
 [ -f gpu.log ] && mv gpu.log gpu.log.old
 [ -f results.csv ] && mv results.csv results.csv.old
 
-MODEL="meta-llama/Llama-2-70b-chat-hf"
-SHARDS=4
+MODEL="meta-llama/Llama-2-7b-chat-hf"
+SHARDS=1
 HOST=127.0.0.1
 PORT=8088
 TGI_VERSION=1.0.3
