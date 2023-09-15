@@ -6,30 +6,6 @@ import time
 import os
 import sys
 
-# Wait for the server to start
-filename = "tgi.log"
-text = "Connected"
-
-
-def monitor_file(filename, text):
-    while not os.path.exists(filename):
-        time.sleep(10)
-
-    while True:
-        with open(filename, "r") as file:
-            if text in file.read():
-                print(f"TGI Server running")
-                break
-        print(f"Waiting for TGI Server to start")
-        time.sleep(10)
-
-
-monitor_file(filename, text)
-
-# Start the GPU performance monitoring
-os.system(
-    "nvidia-smi --query-gpu=index,gpu_name,utilization.gpu,utilization.memory,power.draw,temperature.gpu,fan.speed,clocks_throttle_reasons.sw_thermal_slowdown,clocks.current.graphics,clocks.current.memory --format=csv -l 1 > gpu.log &"
-)
 
 client = Client("http://127.0.0.1:8088", timeout=40)
 
@@ -70,5 +46,4 @@ else:
 for n in range(int(num_runs)):
     print(f"Time taken: {get_inference_time(prompt)} seconds")
 
-# Stop the GPU performance monitoring
-os.system("killall nvidia-smi")
+

@@ -19,7 +19,7 @@ LOCAL_DIR=~/.local/share/enroot
 
 # Create enroot container
 
-#enroot import docker://ghcr.io#huggingface/text-generation-inference:$TGI_VERSION
+enroot import docker://ghcr.io#huggingface/text-generation-inference:$TGI_VERSION
 enroot create --name tgi-$TGI_VERSION huggingface+text-generation-inference+$TGI_VERSION.sqsh
 
 # Edit /etc/rc inside the local enroot container files
