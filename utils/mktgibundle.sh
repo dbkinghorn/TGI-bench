@@ -18,9 +18,11 @@ TGI_VERSION=1.0.3
 LOCAL_DIR=~/.local/share/enroot
 
 # Create enroot container
+if [ ! -f huggingface+text-generation-inference+$TGI_VERSION.sqsh ]; then
+  enroot import docker://ghcr.io#huggingface/text-generation-inference:$TGI_VERSION
+fi
 
-enroot import docker://ghcr.io#huggingface/text-generation-inference:$TGI_VERSION
-enroot create --name tgi-$TGI_VERSION huggingface+text-generation-inference+$TGI_VERSION.sqsh
+enroot create --force --name tgi-$TGI_VERSION huggingface+text-generation-inference+$TGI_VERSION.sqsh
 
 # Edit /etc/rc inside the local enroot container files
 # Make the container start $@ or bash instead of text-generation-launcher
