@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 nodepyenv.py creates an isolated no-dependency conda virtual environment using micromamba
 
