@@ -1,41 +1,41 @@
 ###################################
 TGI-bench
-version 0.0.1
+version 0.3
 D.B Kinghorn 
 Puget Systems 2023
 ###################################
 
-This directory contains a collection of tools to do a repeatable bechhmark
-using HuggingFace Text Generation Inference (TGI).
+This directory contains a collection of tools to do a repeatable benchmark
+using HuggingFace Text Generation Inference (TGI) server.
 
-The default model is llama-2-70b-chat-hf but that can be changed by editing
-the RUN-ME-tgi-bench.sh file.
+This is setup for Meta-Llama-2 models;
+- llama-2-7b-chat-hf (bf16 and bnb quantized NF4)
+- llama-2-70b-chat-hf
+
 
 USAGE:
-    ./RUN-ME-tgi-bench.sh
+    ./tgi-bench-<model spec>.sh
     or 
-    ./RUN-ME-tgi-bench.sh <number of prompt repeats>
-    The default repeats is 3 use more for thermal load monitoring i.e. 50
+    ./tgi-bench<model spec>.sh <number of prompt repeats>
+    The default number of repeats is 5, use more for thermal load testing/monitoring i.e. 50
 
-    Results are output to
+    Results are output to 3 files;
     - The screen with per run timing and summary stats at the end
-    - tgi-log with is the raw json TGI server logs
-    - results.csv [Timestamp,Validation Time (ms),Queue Time (ms),Inference Time (s),Time per Token (ms)]
-    - gpu.log which is the output of nvidia-smi for the run monitoring performance and GPU temperature
+    - tgi.log:     The TGI server log in json format
+    - results.csv: [Timestamp,Validation Time (ms),Queue Time (ms),Inference Time (s),Time per Token (ms)]
+    - gpu.log:     The output of nvidia-smi for the run monitoring performance and GPU temperature
 
-    To monitor gpu specs during the benchmark run open another terminal and run
+    To monitor gpu performance specs during the benchmark run, open another terminal and run
     tail -f gpu.log (CTRL-C to stop)
 
-Puget local
-    Download the benchmark directory from the NAS to the test machine
-    On the test systems do
+**NOTES:** 
+1. Using these scripts will require a HuggingFace API token since Llama-2 models are "gated". You can get one by signing up at https://huggingface.co/ You can then pass the token to the container by writting ` export HUGGING_FACE_HUB_TOKEN=<your token id>` to the file named `.env` in the same directory as the benchmark scripts.
 
-    rsync -av user@172.19.0.10://mnt/storage/install/Temp/TGI-bench .  (don't forget the "dot" at the end)
+2. Dev build required: The scripts are expecting an enroot container bundle named `tgi-1.0.3.run` that will extract and run a slightly modified version of the HuggingFace TGI server. There is a script in the utils directory for creating this self running container (`mk-tgi-bundle.sh`). (the generated container bundle does not require a local docker runtime!) The script to make the enroot container bundle requires a local install of enroot.
+**TODO:** add a script to do enroot install to utils
+Once the tgi-1.0.x.run container bundle is created it is portable and can be copied to other systems along with the other file in this repo. (it is about 16GB) 
 
-    It may take a long time to download (~150GB). It also seems that the nas likes to drop the connection!
-    rsync will do the right thing and pick up where it left off. It will also skip files that are already there.
+3. The mm directory contains a copy of micromamba and a yaml file spec to creat a local python env for use byt the .py scripts. To create this env run `mm/micromamba env create --yes -r mm -f mm/py-client-env.yml`
 
-    cd to the benchmark directory and run ./RUN-ME-tgi-bench.sh or ./RUN-ME-tgi-bench.sh <number of prompt repeats>
-    and monitor the gpu.log file with tail -f gpu.log
-
-
+4. The tgi server will download the model if it is not already present in the directory. This will only be done once. This will take a considerable amount of time. [The 70b model is ~130GB and 7b model 14GB]
+If you will be using the benchmark on multiple test systems you will want to transfer the model directories along with the rest of the files in this repo. You additionally need the tgi-1.0.x.run container bundle. (see note 2 above)
