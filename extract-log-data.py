@@ -3,6 +3,7 @@
 import sys
 import csv
 import json
+import os
 import pandas as pd
 
 
@@ -55,6 +56,10 @@ summary = df.describe(percentiles=[])
 
 print(summary)
 
+hostname = os.uname()[1]
+
 with open("summary.out", "a") as f:
-    f.write(summary.to_string())
+    f.write(str(hostname))
     f.write('\n')
+    f.write(summary.to_string())
+    f.write('\n\n')
