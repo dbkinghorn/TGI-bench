@@ -51,4 +51,10 @@ with open(log_file_name, "r") as f, open(output_file_name, "w", newline="") as c
 
 df = pd.read_csv(output_file_name)
 
-print(df.describe(percentiles=[]))
+summary = df.describe(percentiles=[])
+
+print(summary)
+
+with open("summary.out", "a") as f:
+    f.write(summary.to_string())
+    f.write('\n')
