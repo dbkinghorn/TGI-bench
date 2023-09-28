@@ -12,6 +12,7 @@ set -m
 [ -f tgi.log ] && mv tgi.log tgi.log.old
 [ -f gpu.log ] && mv gpu.log gpu.log.old
 [ -f results.csv ] && mv results.csv results.csv.old
+[ -f summary.out ] && mv summary.out summary.out.old
 
 MODEL="meta-llama/Llama-2-7b-chat-hf"
 SHARDS=1
