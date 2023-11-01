@@ -56,10 +56,6 @@ summary = df.describe(percentiles=[])
 
 print(summary)
 
-hostname = os.uname()[1]
-
-with open("summary.out", "a") as f:
-    f.write(str(hostname))
-    f.write('\n')
+with open("summary.out", "w") as f:
     f.write(summary.to_string())
-    f.write('\n\n')
+    f.write("\n")
