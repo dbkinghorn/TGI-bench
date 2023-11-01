@@ -13,6 +13,7 @@ set -m
 [ -f gpu.log ] && mv gpu.log gpu.log.old
 [ -f results.csv ] && mv results.csv results.csv.old
 [ -f summary.out ] && mv summary.out summary.out.old
+[ -f summary1d.out ] && mv summary.out summary1d.out.old
 
 MODEL="meta-llama/Llama-2-70b-chat-hf"
 SHARDS=4
