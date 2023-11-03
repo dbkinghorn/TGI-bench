@@ -56,10 +56,21 @@ summary = df.describe(percentiles=[])
 
 print(summary)
 
-hostname = os.uname()[1]
-
-with open("summary.out", "a") as f:
-    f.write(str(hostname))
-    f.write('\n')
+with open("summary.out", "w") as f:
     f.write(summary.to_string())
-    f.write('\n\n')
+    f.write("\n")
+
+# Write the summay to file in the format expected by the PS install benchmark automation
+with open("summary1d.out", "w") as f:
+    for column in summary.columns:
+        for index, row in summary.iterrows():
+            metric, unit = column.split(" (")
+            unit = unit[:-1]
+            if index == "count":
+                f.write(
+                    f"TGI-bench-0.3, {metric}, {index}, {int(row[column])}, {'runs'}\n"
+                )
+            else:
+                f.write(
+                    f"TGI-bench-0.3, {metric}, {index}, {row[column]:.3f}, {unit}\n"
+                )
