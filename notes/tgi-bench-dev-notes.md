@@ -14,7 +14,7 @@ enroot bundle -o tgi-1.0.1.run  huggingface+text-generation-inference+1.0.1.sqsh
 ## Start the container
 
 ```
-export HUGGING_FACE_HUB_TOKEN=hf_...
+export HUGGING_FACE_HUB_TOKEN=< your HF Token >
 
 enroot start --rw --root --env HUGGING_FACE_HUB_TOKEN --mount .:/data tgi-1.0.1  --model-id "meta-llama/Llama-2-70b-chat-hf" --num-shard 4 --port 8088 --hostname 172.17.167.1 --trust-remote-code
 ```
